@@ -47,6 +47,7 @@ urlPostMessage = "{}/api/jolokia/"
 bodyPostMessage = '{"type":"EXEC", "mbean":"org.apache.activemq:type=Broker,brokerName=[BROKER],destinationType=Queue,destinationName=[QUEUE]", "operation":"sendTextMessage(java.util.Map,java.lang.String,java.lang.String,java.lang.String)", "arguments":[ARGUMENTS]}'
 
 writeExcelFile = True
+outputFolder = "output/"
 excelFileName = "PRD - Messages MQ bloques.xlsx"
 excelColumns = ["TABLE", "OPERATION", "dlqDeliveryFailureCause", "StringProperties", "Text"]
 
@@ -133,5 +134,5 @@ bodyList = formatMessages(allMessages)
     #postMessage(VAL, DST_QUEUE, message)
 
 if (writeExcelFile):
-    wb.save(excelFileName)
+    wb.save(outputFolder + excelFileName)
 
