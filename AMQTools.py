@@ -48,7 +48,7 @@ bodyPostMessage = '{"type":"EXEC", "mbean":"org.apache.activemq:type=Broker,brok
 
 writeExcelFile = True
 outputFolder = "output/"
-excelFileName = "PRD - Messages MQ bloques.xlsx"
+excelFileName = " - Messages MQ bloques.xlsx"
 excelColumns = ["TABLE", "OPERATION", "dlqDeliveryFailureCause", "StringProperties", "Text"]
 
 def getAllMessages(environnement, queue):
@@ -116,6 +116,9 @@ def postMessage(environnement, queue, message):
         print(response)
 
 #MAIN
+SRC_ENV = VAL
+DST_ENV = VAL
+
 wb = Workbook()
 if (writeExcelFile):    
     ws1 = wb.active
@@ -124,15 +127,15 @@ if (writeExcelFile):
     #ws2 = wb.create_sheet(title="TEST2")
 
 
-allMessages = getAllMessages(PRD, SRC_QUEUE)
+allMessages = getAllMessages(SRC_ENV, SRC_QUEUE)
 bodyList = formatMessages(allMessages)
 
 #if (bodyList[0] is not None):
-#  postMessage(VAL, DST_QUEUE, bodyList[0])
+#  postMessage(DST_ENV, DST_QUEUE, bodyList[0])
 
 #for message in bodyList:
-    #postMessage(VAL, DST_QUEUE, message)
+    #postMessage(DST_ENV, DST_QUEUE, message)
 
 if (writeExcelFile):
-    wb.save(outputFolder + excelFileName)
+    wb.save(outputFolder + SRC_ENV["name"] + excelFileName)
 
