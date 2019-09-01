@@ -4,6 +4,7 @@ import json
 import difflib
 import csv
 import re
+import os
 import sys, getopt
 from openpyxl import Workbook
 
@@ -48,7 +49,7 @@ bodyPostMessage = '{"type":"EXEC", "mbean":"org.apache.activemq:type=Broker,brok
 
 writeExcelFile = True
 outputFolder = "output/"
-excelFileName = " - Messages MQ bloques.xlsx"
+excelFileName = "_Messages_MQ_Bloques.xlsx"
 excelColumns = ["TABLE", "OPERATION", "dlqDeliveryFailureCause", "StringProperties", "Text"]
 
 def getAllMessages(environnement, queue):
@@ -136,6 +137,12 @@ bodyList = formatMessages(allMessages)
 #for message in bodyList:
     #postMessage(DST_ENV, DST_QUEUE, message)
 
+
 if (writeExcelFile):
-    wb.save(outputFolder + SRC_ENV["name"] + excelFileName)
+    pathFolder = os.path.dirname(__file__) + '/' + outputFolder
+    if not os.path.exists(pathFolder):
+        os.mkdir(pathFolder)
+    path = pathFolder + SRC_ENV["name"] + excelFileName
+    print ("fichier excel généré: %s" %path)
+    wb.save(path)
 
