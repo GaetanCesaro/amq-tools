@@ -25,10 +25,10 @@ def main():
         else:
             assert False, "unhandled option"
 
-    # SRC_QUEUE = cfg.DLQ_QGENGPP
-    # DST_QUEUE = cfg.QGENGPP
-    SRC_QUEUE = cfg.DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY
-    DST_QUEUE = cfg.Consumer_SGENGPP_VirtualTopic_TDATALEGACY
+    SRC_QUEUE = cfg.DLQ_QGENGPP
+    DST_QUEUE = cfg.QGENGPP
+    # SRC_QUEUE = cfg.DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY
+    # DST_QUEUE = cfg.Consumer_SGENGPP_VirtualTopic_TDATALEGACY
     SRC_ENV = cfg.PRD
     DST_ENV = cfg.VAL
 
@@ -41,11 +41,11 @@ def main():
 
     if (bodyList[0] is not None):
         log.ok("post FIRST message in queue: %s %s" %(DST_QUEUE, DST_ENV))
-        # postMessage(DST_ENV, DST_QUEUE, bodyList[0])
+        core.postMessage(DST_ENV, DST_QUEUE, bodyList[0])
 
     #for message in tqdm(bodyList):
         # log.ok("OK --> post ALL messages in queue: %s %s",  %(DST_QUEUE, DST_ENV))
-        #postMessage(DST_ENV, DST_QUEUE, message)
+        #core.postMessage(DST_ENV, DST_QUEUE, message)
 
 
 if __name__ == "__main__":
