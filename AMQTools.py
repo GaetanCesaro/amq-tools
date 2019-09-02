@@ -25,8 +25,10 @@ def main():
         else:
             assert False, "unhandled option"
 
-    SRC_QUEUE = cfg.DLQ_QGENGPP
-    DST_QUEUE = cfg.QGENGPP
+    # SRC_QUEUE = cfg.DLQ_QGENGPP
+    # DST_QUEUE = cfg.QGENGPP
+    SRC_QUEUE = cfg.DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY
+    DST_QUEUE = cfg.Consumer_SGENGPP_VirtualTopic_TDATALEGACY
     SRC_ENV = cfg.PRD
     DST_ENV = cfg.VAL
 

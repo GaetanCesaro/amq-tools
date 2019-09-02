@@ -29,7 +29,10 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
         wb = Workbook()
         ws1 = wb.active
         ws1.title = queue[0 : 31]
-        ws1.append(cfg.EXCEL_COLUMNS)
+        if queue == cfg.DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY:
+            ws1.append(cfg.EXCEL_COLUMNS_DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY)
+        else:
+            ws1.append(cfg.EXCEL_COLUMNS)
         #ws2 = wb.create_sheet(title="TEST2")
 
     for message in tqdm(jsonResponse["value"], desc="formatMessages"):

@@ -55,5 +55,5 @@ BODY_POST_MESSAGE = '{"type":"EXEC", "mbean":"org.apache.activemq:type=Broker,br
 # Excel file configuration
 OUTPUT_FOLDER = "output\\"
 EXCEL_FILE_NAME = "_Messages_MQ_Bloques.xlsx"
-EXCEL_COLUMNS = ["TABLE", "OPERATION", "dlqDeliveryFailureCause", "StringProperties", "Text"]
-#EXCEL_COLUMNS = ["dlqDeliveryFailureCause", "StringProperties", "Text"]
+EXCEL_COLUMNS_DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY = ["TABLE", "OPERATION", "dlqDeliveryFailureCause", "StringProperties", "Text"]
+EXCEL_COLUMNS = ["dlqDeliveryFailureCause", "StringProperties", "Text"]
