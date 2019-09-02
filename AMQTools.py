@@ -25,13 +25,17 @@ def main():
         else:
             assert False, "unhandled option"
 
-    SRC_QUEUE = cfg.DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY
-    DST_QUEUE = cfg.Consumer_SGENGPP_VirtualTopic_TDATALEGACY
+    SRC_QUEUE = cfg.DLQ_QGENGPP
+    DST_QUEUE = cfg.QGENGPP
     SRC_ENV = cfg.PRD
     DST_ENV = cfg.VAL
 
+
+    log.printBanner()
+
     allMessages = core.getAllMessages(SRC_ENV, SRC_QUEUE)
     bodyList = core.formatMessages(allMessages, SRC_ENV, DST_QUEUE, writeExcelFile)
+
 
     if (bodyList[0] is not None):
         log.ok("post FIRST message in queue: %s %s" %(DST_QUEUE, DST_ENV))

@@ -49,11 +49,15 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
 
         # ajout dans le fichier excel
         if writeExcelFile: 
-            table = message["StringProperties"]['TABLE']
-            operation = message["StringProperties"]['OPERATION']
             dlqDeliveryFailureCause = message["StringProperties"]['dlqDeliveryFailureCause']
-            #ws1.append([dlqDeliveryFailureCause, properties, text.replace('\\\"', '"').replace('"{"', '{"').replace('"}"', '"}')])
-            ws1.append([table, operation, dlqDeliveryFailureCause, properties, text.replace('\\\"', '"').replace('"{"', '{"').replace('"}"', '"}')])
+
+            if queue == cfg.DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY:
+                table = message["StringProperties"]['TABLE']
+                operation = message["StringProperties"]['OPERATION']
+                ws1.append([table, operation, dlqDeliveryFailureCause, properties, text.replace('\\\"', '"').replace('"{"', '{"').replace('"}"', '"}')])
+            else:
+                ws1.append([dlqDeliveryFailureCause, properties, text.replace('\\\"', '"').replace('"{"', '{"').replace('"}"', '"}')])
+            
 
         argument = []
         argument.append(properties)
@@ -94,6 +98,3 @@ def postMessage(environnement, queue, message):
     else:
         log.error("postMessage")
         log.error(response)
-
-    
-
