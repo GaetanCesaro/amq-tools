@@ -9,6 +9,12 @@ import sys, getopt
 from openpyxl import Workbook
 
 # Environnements
+LOCALHOST = {
+    "name": "LOCALHOST",
+    "hostname": "http://localhost:8161",
+    "broker": "ACTIVEMQ-LOCALHOST"
+}
+
 DEV = {
     "name": "DEV",
     "hostname": "http://mom-tst-01:1161",
@@ -36,11 +42,20 @@ PRD = {
 USERNAME = "admin"
 PASSWORD = "admin"
 
+# Queues
 #SRC_QUEUES = ["DLQ.Consumer.SGENGPP.VirtualTopic.TDATALEGACY", "DLQ.Consumer.SGENCLI.VirtualTopic.TDATAGPP"]
 #DST_QUEUES = ["Consumer.SGENGPP.VirtualTopic.TDATALEGACY", "Consumer.SGENCLI.VirtualTopic.TDATAGPP"]
+Consumer_SGENGPP_VirtualTopic_TDATALEGACY = "Consumer.SGENGPP.VirtualTopic.TDATALEGACY"
+DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY = "DLQ.Consumer.SGENGPP.VirtualTopic.TDATALEGACY"
+Consumer_SGENCLI_VirtualTopic_TDATAGPP = "Consumer.SGENCLI.VirtualTopic.TDATAGPP"
+DLQ_Consumer_SGENCLI_VirtualTopic_TDATAGPP = "DLQ.Consumer.SGENCLI.VirtualTopic.TDATAGPP"
+QGENGPP = "QGENGPP"
+DLQ_QGENGPP = "DLQ.QGENGPP"
+QGENCLI = "QGENCLI"
+DLQ_QGENCLI = "DLQ.QGENCLI"
 
-SRC_QUEUE = "DLQ.Consumer.SGENGPP.VirtualTopic.TDATALEGACY"
-DST_QUEUE = "Consumer.SGENGPP.VirtualTopic.TDATALEGACY"
+SRC_QUEUE = DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY
+DST_QUEUE = Consumer_SGENGPP_VirtualTopic_TDATALEGACY
 
 urlGetAllMessages = "{}/api/jolokia/exec/org.apache.activemq:type=Broker,brokerName={},destinationType=Queue,destinationName={}/browse()"
 #urlGetOneMessage = "{}/api/jolokia/exec/org.apache.activemq:type=Broker,brokerName={},destinationType=Queue,destinationName={}/browseMessages(java.lang.String)/JMSMessageID={}"
@@ -51,6 +66,7 @@ writeExcelFile = True
 outputFolder = "output/"
 excelFileName = "_Messages_MQ_Bloques.xlsx"
 excelColumns = ["TABLE", "OPERATION", "dlqDeliveryFailureCause", "StringProperties", "Text"]
+#excelColumns = ["dlqDeliveryFailureCause", "StringProperties", "Text"]
 
 def getAllMessages(environnement, queue):
     response = requests.get(urlGetAllMessages.format(environnement["hostname"], environnement["broker"], queue), params=None, verify=False, auth=(USERNAME, PASSWORD))
@@ -81,7 +97,7 @@ def formatMessages(jsonResponse):
 
         # 1ere passe de formatage
         text = json.dumps(message["Text"]).replace(' ', '').replace('\\\"', '"')
-        
+
         argument = []
         argument.append(properties)
         argument.append(text)
@@ -89,10 +105,11 @@ def formatMessages(jsonResponse):
         argument.append(PASSWORD)
 
         if(writeExcelFile):
+            #ws1.append([dlqDeliveryFailureCause, properties, text.replace('\\\"', '"').replace('"{"', '{"').replace('"}"', '"}')])
             ws1.append([table, operation, dlqDeliveryFailureCause, properties, text.replace('\\\"', '"').replace('"{"', '{"').replace('"}"', '"}')])
         
         # 2eme passe de formatage pour préparer le body
-        argumentText = json.dumps(argument).replace('\\\"', '"').replace('\\\"', '"').replace('\\\"', '"').replace('\\\"', '"').replace('"{"', '{"').replace('"{"', '{"').replace('"}"', '"}').replace('"}"', '"}')
+        argumentText = json.dumps(argument).replace('\\\"', '"').replace('\\\"', '"').replace('\\\"', '"').replace('\\\"', '"').replace('"{"', '{"').replace('"{"', '{"').replace('"}"', '"}').replace('"}"', '"}').replace('}"",', '},')
         messageList.append(argumentText)
 
     print("formatMessages OK - {} messages traites".format(len(messageList)))
@@ -117,7 +134,7 @@ def postMessage(environnement, queue, message):
         print(response)
 
 #MAIN
-SRC_ENV = VAL
+SRC_ENV = PRD
 DST_ENV = VAL
 
 wb = Workbook()
@@ -131,10 +148,12 @@ if (writeExcelFile):
 allMessages = getAllMessages(SRC_ENV, SRC_QUEUE)
 bodyList = formatMessages(allMessages)
 
-#if (bodyList[0] is not None):
-#  postMessage(DST_ENV, DST_QUEUE, bodyList[0])
+if (bodyList[0] is not None):
+    print ("post FIRST message in queue:", DST_QUEUE, DST_ENV)
+    postMessage(DST_ENV, DST_QUEUE, bodyList[0])
 
 #for message in bodyList:
+    #print ("post ALL messages in queue:", DST_QUEUE, DST_ENV)
     #postMessage(DST_ENV, DST_QUEUE, message)
 
 

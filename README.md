@@ -4,9 +4,9 @@ AMQ-Tools est un utilitaire d'exploitation des files ActiveMQ.
 
 ## Configuration Workspace
 
-L'outil est actuellement en Python 2.7, à migrer en Python 3 avant 2020.
+L'outil fonctionne en Python 3.7.
 
-1. Installation Python 2.7 [ici](https://www.python.org/downloads/release/python-2716/)
+1. Installation Python 3.7 [ici](https://www.python.org/downloads/release/python-374/) ou spérieur 
 2. Lancer pip install à la racine du repo pour récupérer les requirements
 
 ```
