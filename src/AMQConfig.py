@@ -5,12 +5,12 @@ ENVIRONNEMENTS = {
     "LOCALHOST": {
         "name": "LOCALHOST",
         "hostname": "http://localhost:8161",
-        "broker": "ACTIVEMQ-LOCALHOST"
+        "broker": "localhost"
     },
     "DEV": {
         "name": "DEV",
         "hostname": "http://mom-tst-01:1161",
-        "broker": "ACTIVEMQ-DEV"
+        "broker": "ACTIVEMQ-DEV1"
     },
     "INT": {
         "name": "INT",
