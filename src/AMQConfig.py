@@ -47,3 +47,10 @@ OUTPUT_FOLDER = "output\\"
 EXCEL_FILE_NAME = "_Messages_MQ_Bloques.xlsx"
 EXCEL_COLUMNS_DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY = ["TABLE", "OPERATION", "dlqDeliveryFailureCause", "StringProperties", "Text"]
 EXCEL_COLUMNS = ["dlqDeliveryFailureCause", "StringProperties", "Text"]
+
+EXCEL_COLUMNS = {
+    "Consumer.SGENCLI.VirtualTopic.TDATAGPP": ["dlqDeliveryFailureCause", "StringProperties", "Text"],
+    "Consumer.SGENGPP.VirtualTopic.TDATALEGACY": ["TABLE", "OPERATION", "dlqDeliveryFailureCause", "StringProperties", "Text"],
+    "QGENGPP": ["dlqDeliveryFailureCause", "StringProperties", "Text"],
+    "QGENCLI": ["dlqDeliveryFailureCause", "StringProperties", "Text"]
+}

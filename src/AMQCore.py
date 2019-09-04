@@ -40,10 +40,8 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
         wb = Workbook()
         ws1 = wb.active
         ws1.title = queue[0 : 31]
-        if queue == "DLQ.Consumer.SGENGPP.VirtualTopic.TDATALEGACY":
-            ws1.append(cfg.EXCEL_COLUMNS_DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY)
-        else:
-            ws1.append(cfg.EXCEL_COLUMNS)
+        ws1.append(cfg.EXCEL_COLUMNS[queue])
+
         #ws2 = wb.create_sheet(title="TEST2")
 
     if not jsonResponse["value"]:
@@ -69,7 +67,7 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
         if writeExcelFile: 
             dlqDeliveryFailureCause = message["StringProperties"]['dlqDeliveryFailureCause']
 
-            if queue == cfg.DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY:
+            if queue == "DLQ.Consumer.SGENGPP.VirtualTopic.TDATALEGACY":
                 table = message["StringProperties"]['TABLE']
                 operation = message["StringProperties"]['OPERATION']
                 ws1.append([table, operation, dlqDeliveryFailureCause, properties, text.replace('\\\"', '"').replace('"{"', '{"').replace('"}"', '"}')])
