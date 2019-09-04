@@ -40,7 +40,7 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
         wb = Workbook()
         ws1 = wb.active
         ws1.title = queue[0 : 31]
-        if queue == cfg.DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY:
+        if queue == "DLQ.Consumer.SGENGPP.VirtualTopic.TDATALEGACY":
             ws1.append(cfg.EXCEL_COLUMNS_DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY)
         else:
             ws1.append(cfg.EXCEL_COLUMNS)
