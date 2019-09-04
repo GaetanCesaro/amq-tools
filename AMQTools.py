@@ -7,45 +7,84 @@ from tqdm import tqdm
 from termcolor import colored
 
 
+def usage():
+    print("Utilisation : ")
+    print("python AMQTools.py -f <environnement_source> -t <environnement_cible> -q <queue_cible> -a postFirstMessage")
+    print("")
+    print("Options : ")
+    print("-o : Génère un fichier Excel contenant les messages JMS est généré")
+    print("-f <environnement_source> (--from) : Environnement source où vont être récupérés les messages JMS")
+    print("-t <environnement_cible> (--to) : Environnement cible où vont être envoyés les messages JMS")
+    print("-q <queue_cible> (--queue) : File MQ cible. La file MQ source sera déduite en préfixant par DLQ.")
+    print("-a <action> (--action) : Environnement cible où vont être envoyés les messages JMS")
+    print("  Actions possibles : postFirstMessage, postAllMessages, etc...")
+
+
 def main():
+    #log.printBanner()
+
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "ho", ["help", "output"])
+        opts, args = getopt.getopt(sys.argv[1:], "hof:t:f:q:a:", ["help", "output","from","to","queue","action"])
+
     except getopt.GetoptError as err:
-        # print help information and exit:
-        print(err)  
-        #usage()
+        log.err(err)  
+        usage()
         sys.exit(2)
+    
     writeExcelFile = False
-    for o, a in opts:
-        if o in ("-h", "--help"):
-            #usage()
+    srcEnv = ""
+    dstEnv = ""
+    srcQueue = ""
+    dstQueue = ""
+    action = ""
+
+    for opt, arg in opts:
+        if opt in ("-h", "--help"):
+            usage()
             sys.exit()
-        elif o in ("-o", "--output"):
+        elif opt in ("-o", "--output"):
             writeExcelFile = True
+        elif opt in ("-f", "--from"):
+            srcEnv = arg
+        elif opt in ("-t", "--to"):
+            dstEnv = arg
+        elif opt in ("-q", "--queue"):
+            dstQueue = arg
+            srcQueue = "DLQ."+dstQueue
+        elif opt in ("-a", "--action"):
+            action = arg    
         else:
             assert False, "unhandled option"
 
-    SRC_QUEUE = cfg.DLQ_QGENGPP
-    DST_QUEUE = cfg.QGENGPP
-    # SRC_QUEUE = cfg.DLQ_Consumer_SGENGPP_VirtualTopic_TDATALEGACY
-    # DST_QUEUE = cfg.Consumer_SGENGPP_VirtualTopic_TDATALEGACY
-    SRC_ENV = cfg.PRD
-    DST_ENV = cfg.VAL
+    # Paramètres obligatoires sinon on sort
+    if not srcEnv or not dstEnv or not dstQueue:
+        usage()
+        sys.exit()
 
+    print("FROM ENV", srcEnv, "--> TO", dstEnv)
+    SRC_ENV = cfg.ENVIRONNEMENTS[srcEnv]
+    DST_ENV = cfg.ENVIRONNEMENTS[dstEnv]
 
-    log.printBanner()
+    print("FROM QUEUE", srcQueue, "--> TO", dstQueue)
+    SRC_QUEUE = srcQueue
+    DST_QUEUE = dstQueue
 
     allMessages = core.getAllMessages(SRC_ENV, SRC_QUEUE)
     bodyList = core.formatMessages(allMessages, SRC_ENV, DST_QUEUE, writeExcelFile)
 
+    # Post d'un seul message
+    if action == "postFirstMessage":            
+        if (bodyList[0] is not None):
+            log.ok("Posting first message from queue %s to queue %s" %(SRC_QUEUE, DST_QUEUE))
+            core.postMessage(DST_ENV, DST_QUEUE, bodyList[0])
+        else:
+            log.warn("Nothing to post")
 
-    if (bodyList[0] is not None):
-        log.ok("post FIRST message in queue: %s %s" %(DST_QUEUE, DST_ENV))
-        core.postMessage(DST_ENV, DST_QUEUE, bodyList[0])
-
-    #for message in tqdm(bodyList):
-        # log.ok("OK --> post ALL messages in queue: %s %s",  %(DST_QUEUE, DST_ENV))
-        #core.postMessage(DST_ENV, DST_QUEUE, message)
+    # Post de tous les messages
+    if action == "postAllMessages":
+        log.ok("Posting all messages from queue %s to queue %s" %(SRC_QUEUE, DST_QUEUE))
+        for message in tqdm(bodyList):
+            core.postMessage(DST_ENV, DST_QUEUE, message)
 
 
 if __name__ == "__main__":

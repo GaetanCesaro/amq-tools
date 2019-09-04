@@ -13,15 +13,26 @@ import src.AMQConfig as cfg
 import src.AMQLog as log
 
 
-def getAllMessages(environnement, queue):
-    response = requests.get(cfg.URL_GET_ALL_MESSAGES.format(environnement["hostname"], environnement["broker"], queue), params=None, verify=False, auth=(cfg.USERNAME, cfg.PASSWORD))
+def processJsonResponse(method, response):
     if (response.status_code == 200):
         jsonResponse = json.loads(response.text)
-        log.ok("getAllMessages")
+        responseCode = jsonResponse["status"]
+        log.ok("%s - HTTP Status %s" %(method, str(jsonResponse["status"])))
+
+        if responseCode != 200:
+            log.error(response.text)
+            sys.exit(2)
+
         return jsonResponse
     else:
-        log.error("getAllMessages")
+        log.error(method)
         log.error(response)
+
+
+def getAllMessages(environnement, queue):
+    response = requests.get(cfg.URL_GET_ALL_MESSAGES.format(environnement["hostname"], environnement["broker"], queue), params=None, verify=False, auth=(cfg.USERNAME, cfg.PASSWORD))
+    return processJsonResponse("getAllMessages", response)
+
 
 def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
     messageList = []
@@ -34,6 +45,10 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
         else:
             ws1.append(cfg.EXCEL_COLUMNS)
         #ws2 = wb.create_sheet(title="TEST2")
+
+    if not jsonResponse["value"]:
+        log.error("Rien a formater")
+        sys.exit(2)
 
     for message in tqdm(jsonResponse["value"], desc="formatMessages"):
         
@@ -94,10 +109,4 @@ def postMessage(environnement, queue, message):
     jsonBody = json.loads(textBody)
 
     response = requests.post(cfg.URL_POST_MESSAGE.format(environnement["hostname"]), json=jsonBody, auth=(cfg.USERNAME, cfg.PASSWORD))
-    if (response.status_code == 200):
-        jsonResponse = json.loads(response.text)
-        log.ok("postMessage - HTTP Status %s" %(str(jsonResponse["status"])))
-        return jsonResponse
-    else:
-        log.error("postMessage")
-        log.error(response)
+    return processJsonResponse("postMessage", response)
