@@ -54,7 +54,8 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
         properties = "{"
         headers = message["StringProperties"]
         for header in headers:
-            properties = properties + "\"" + header + "\":\"" + message["StringProperties"][header] + "\", "
+            if header != 'dlqDeliveryFailureCause':
+                properties = properties + "\"" + header + "\":\"" + message["StringProperties"][header] + "\", "
 
         properties = properties + "\"JMSDeliveryMode\":\"" + message["JMSDeliveryMode"] + "\""
         properties = properties + ", \"JMSPriority\":\"" + str(message["JMSPriority"]) + "\""
