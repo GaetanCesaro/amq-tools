@@ -7,19 +7,6 @@ from tqdm import tqdm
 from termcolor import colored
 
 
-def usage():
-    print("Utilisation : ")
-    print("python AMQTools.py -f <environnement_source> -t <environnement_cible> -q <queue_cible> -a postFirstMessage")
-    print("")
-    print("Options : ")
-    print("-o : Génère un fichier Excel contenant les messages JMS est généré")
-    print("-f <environnement_source> (--from) : Environnement source où vont être récupérés les messages JMS")
-    print("-t <environnement_cible> (--to) : Environnement cible où vont être envoyés les messages JMS")
-    print("-q <queue_cible> (--queue) : File MQ cible. La file MQ source sera déduite en préfixant par DLQ.")
-    print("-a <action> (--action) : Environnement cible où vont être envoyés les messages JMS")
-    print("  Actions possibles : postFirstMessage, postAllMessages, etc...")
-
-
 def main():
     #log.printBanner()
 
@@ -28,7 +15,7 @@ def main():
 
     except getopt.GetoptError as err:
         log.err(err)  
-        usage()
+        log.usage()
         sys.exit(2)
     
     writeExcelFile = False
@@ -40,7 +27,7 @@ def main():
 
     for opt, arg in opts:
         if opt in ("-h", "--help"):
-            usage()
+            log.usage()
             sys.exit()
         elif opt in ("-o", "--output"):
             writeExcelFile = True
@@ -58,7 +45,7 @@ def main():
 
     # Paramètres obligatoires sinon on sort
     if not srcEnv or not dstEnv or not dstQueue:
-        usage()
+        log.usage()
         sys.exit()
 
     print("FROM ENV", srcEnv, "--> TO", dstEnv)
