@@ -29,7 +29,7 @@ def usage():
     print("-q <queue_cible> (--queue) : File MQ cible. La file MQ source sera déduite en préfixant par DLQ.")
     print("-a <action> (--action) : Environnement cible où vont être envoyés les messages JMS")
     print("---")
-    print("  Actions possibles : postFirstMessage, postAllMessages, etc...")
+    print("  Actions possibles : postFirstMessage, postAllMessages, retryMessages, etc...")
     print("  Environnements possibles : LOCALHOST, DEV, INT, VAL, QUA, PRD")
     print("  Queues possibles : Consumer.SGENGPP.VirtualTopic.TDATALEGACY, Consumer.SGENCLI.VirtualTopic.TDATAGPP")
     print("                     QGENGPP, SRECDNO, SGENGED, SRECOBL, QDATALEGACY, ...")

@@ -6,6 +6,17 @@ import src.AMQLog as log
 from tqdm import tqdm
 from termcolor import colored
 
+def checkParameters(action, srcEnv, dstEnv, dstQueue):
+    # Paramètres obligatoires sinon on sort
+    if action == "retryMessages":
+        # Seule la source est obligatoire
+        if not srcEnv or not dstQueue:
+            log.usage()
+            sys.exit()
+    else:
+        if not srcEnv or not dstEnv or not dstQueue:
+            log.usage()
+            sys.exit()
 
 def main():
     #log.printBanner()
@@ -43,26 +54,25 @@ def main():
         else:
             assert False, "unhandled option"
 
-    # Paramètres obligatoires sinon on sort
-    if not srcEnv or not dstEnv or not dstQueue:
-        log.usage()
-        sys.exit()
+    checkParameters(action, srcEnv, dstEnv, dstQueue)
 
     print("FROM ENV", srcEnv, "--> TO", dstEnv)
     SRC_ENV = cfg.ENVIRONNEMENTS[srcEnv]
-    DST_ENV = cfg.ENVIRONNEMENTS[dstEnv]
+    if dstEnv:
+        DST_ENV = cfg.ENVIRONNEMENTS[dstEnv]
 
     print("FROM QUEUE", srcQueue, "--> TO", dstQueue)
     SRC_QUEUE = srcQueue
     DST_QUEUE = dstQueue
 
-    allMessages = core.getAllMessages(SRC_ENV, SRC_QUEUE)
-    bodyList = core.formatMessages(allMessages, SRC_ENV, DST_QUEUE, writeExcelFile)
-
     # Post d'un seul message
     if action == "postFirstMessage":            
+        log.ok("Posting first message from queue %s to queue %s" %(SRC_QUEUE, DST_QUEUE))
+
+        allMessages = core.getAllMessages(SRC_ENV, SRC_QUEUE)
+        bodyList = core.formatMessages(allMessages, SRC_ENV, DST_QUEUE, writeExcelFile)
+
         if (bodyList[0] is not None):
-            log.ok("Posting first message from queue %s to queue %s" %(SRC_QUEUE, DST_QUEUE))
             core.postMessage(DST_ENV, DST_QUEUE, bodyList[0])
         else:
             log.warn("Nothing to post")
@@ -70,8 +80,16 @@ def main():
     # Post de tous les messages
     if action == "postAllMessages":
         log.ok("Posting all messages from queue %s to queue %s" %(SRC_QUEUE, DST_QUEUE))
+
+        allMessages = core.getAllMessages(SRC_ENV, SRC_QUEUE)
+        bodyList = core.formatMessages(allMessages, SRC_ENV, DST_QUEUE, writeExcelFile)
+        
         for message in tqdm(bodyList):
             core.postMessage(DST_ENV, DST_QUEUE, message)
+
+    # Retry des messages
+    if action == "retryMessages":
+        core.retryMessages(SRC_ENV, SRC_QUEUE)
 
 
 if __name__ == "__main__":
