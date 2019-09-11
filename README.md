@@ -30,7 +30,6 @@ python AMQTools.py -o -f PRD -t DEV -q Consumer.SGENGPP.VirtualTopic.TDATALEGACY
 | Option                              | Description                                                         |
 |-------------------------------------|---------------------------------------------------------------------|
 | -h, --help                          | Aide                                                                |
-| -o, --output                        | Un fichier Excel contenant les messages JMS est généré              |
 | -f <environnement_source> (--from)  | Environnement source où vont être récupérés les messages JMS        |
 | -t <environnement_cible> (--to)     | Environnement cible où vont être envoyés les messages JMS           |
 | -q <queue_cible> (--queue)          | File MQ cible. La file MQ source sera déduite en préfixant par DLQ. |
@@ -48,5 +47,8 @@ python AMQTools.py -o -f PRD -t DEV -q Consumer.SGENGPP.VirtualTopic.TDATALEGACY
 | postFirstMessage   | Récupère les messages de la file source et poste le 1er message dans la file cible    |
 | postAllMessages    | Récupère les messages de la file source et poste tous les messages dans la file cible |
 | retryMessages      | Réjoue tous les messages de la file DLQ associée sur l'environnement source           |
+| exportExcel        | Un fichier Excel contenant les messages JMS est généré                                |
+
+
 
 

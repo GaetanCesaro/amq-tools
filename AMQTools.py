@@ -8,7 +8,7 @@ from termcolor import colored
 
 def checkParameters(action, srcEnv, dstEnv, dstQueue):
     # Paramètres obligatoires sinon on sort
-    if action == "retryMessages":
+    if action == "retryMessages" or action == "exportExcel":
         # Seule la source est obligatoire
         if not srcEnv or not dstQueue:
             log.usage()
@@ -22,7 +22,7 @@ def main():
     #log.printBanner()
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hof:t:f:q:a:", ["help", "output","from","to","queue","action"])
+        opts, args = getopt.getopt(sys.argv[1:], "hf:t:f:q:a:", ["help","from","to","queue","action"])
 
     except getopt.GetoptError as err:
         log.err(err)  
@@ -40,8 +40,6 @@ def main():
         if opt in ("-h", "--help"):
             log.usage()
             sys.exit()
-        elif opt in ("-o", "--output"):
-            writeExcelFile = True
         elif opt in ("-f", "--from"):
             srcEnv = arg
         elif opt in ("-t", "--to"):
@@ -65,9 +63,17 @@ def main():
     SRC_QUEUE = srcQueue
     DST_QUEUE = dstQueue
 
+    # Export Excel des messages de la DLQ
+    if action == "exportExcel":
+        log.ok("Génération du fichier Excel")
+        writeExcelFile = True
+
+        allMessages = core.getAllMessages(SRC_ENV, SRC_QUEUE)
+        bodyList = core.formatMessages(allMessages, SRC_ENV, DST_QUEUE, writeExcelFile)
+
     # Post d'un seul message
     if action == "postFirstMessage":            
-        log.ok("Posting first message from queue %s to queue %s" %(SRC_QUEUE, DST_QUEUE))
+        log.ok("Post 1er message de queue %s vers queue %s" %(SRC_QUEUE, DST_QUEUE))
 
         allMessages = core.getAllMessages(SRC_ENV, SRC_QUEUE)
         bodyList = core.formatMessages(allMessages, SRC_ENV, DST_QUEUE, writeExcelFile)
