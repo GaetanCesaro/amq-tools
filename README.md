@@ -20,9 +20,11 @@ pip install -r requirements.txt
 ### Exemples d'utilisation
 
 ```
-python AMQTools.py -o -f PRD -q QGENGPP -a retryMessages
-python AMQTools.py -o -f VAL -t LOCALHOST -q QGENGPP -a postFirstMessage
-python AMQTools.py -o -f PRD -t DEV -q Consumer.SGENGPP.VirtualTopic.TDATALEGACY -a postAllMessages
+python AMQTools.py -f PRD -a retryMessagesAllQueues
+python AMQTools.py -f PRD -a retryMessages -q QGENGPP
+python AMQTools.py -f PRD -a exportExcel -q QGENGPP
+python AMQTools.py -f VAL -t LOCALHOST -a postFirstMessage -q Consumer.SGENGPP.VirtualTopic.TDATALEGACY
+python AMQTools.py -f PRD -t DEV -a postAllMessages -q Consumer.SGENGPP.VirtualTopic.TDATALEGACY 
 ```
 
 ### Liste des options
@@ -42,13 +44,10 @@ python AMQTools.py -o -f PRD -t DEV -q Consumer.SGENGPP.VirtualTopic.TDATALEGACY
 
 ### Liste des actions
 
-| Action             | Description                                                                           |
-|--------------------|---------------------------------------------------------------------------------------|
-| postFirstMessage   | Récupère les messages de la file source et poste le 1er message dans la file cible    |
-| postAllMessages    | Récupère les messages de la file source et poste tous les messages dans la file cible |
-| retryMessages      | Réjoue tous les messages de la file DLQ associée sur l'environnement source           |
-| exportExcel        | Un fichier Excel contenant les messages JMS est généré                                |
-
-
-
-
+| Action                 | Description                                                                           |
+|------------------------|---------------------------------------------------------------------------------------|
+| retryMessages          | Réjoue tous les messages de la file DLQ associée sur l'environnement source           |
+| retryMessagesAllQueues | Réjoue tous les messages de toutes les files DLQ                                      |
+| exportExcel            | Un fichier Excel contenant les messages JMS de la DLQ associée est généré             |
+| postFirstMessage       | Récupère les messages de la file source et poste le 1er message dans la file cible    |
+| postAllMessages        | Récupère les messages de la file source et poste tous les messages dans la file cible |

@@ -110,6 +110,12 @@ def postMessage(environnement, queue, message):
     response = requests.post(cfg.URL_POST_MESSAGE.format(environnement["hostname"]), json=jsonBody, auth=(cfg.USERNAME, cfg.PASSWORD))
     return processJsonResponse("postMessage", response)
 
+
 def retryMessages(environnement, queue):
     response = requests.get(cfg.URL_RETRY_MESSAGES.format(environnement["hostname"], environnement["broker"], queue), params=None, verify=False, auth=(cfg.USERNAME, cfg.PASSWORD))
-    return processJsonResponse("retryMessages", response)
+    jsonResponse = processJsonResponse("retryMessages", response)
+
+    if jsonResponse:
+        log.ok("Queue %s - Nb message rejoues: %s" %(queue, str(jsonResponse["value"])))
+        return jsonResponse
+

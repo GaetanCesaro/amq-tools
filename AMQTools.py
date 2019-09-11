@@ -6,17 +6,25 @@ import src.AMQLog as log
 from tqdm import tqdm
 from termcolor import colored
 
+
 def checkParameters(action, srcEnv, dstEnv, dstQueue):
     # Paramètres obligatoires sinon on sort
-    if action == "retryMessages" or action == "exportExcel":
-        # Seule la source est obligatoire
-        if not srcEnv or not dstQueue:
+    if action == "retryMessagesAllQueues":
+        if not srcEnv:
+            log.error("L'environnement source est obligatoire")  
             log.usage()
             sys.exit()
+    elif action == "retryMessages" or action == "exportExcel":
+        if not srcEnv or not dstQueue:
+            log.error("L'environnement source et la queue de destination sont obligatoires")  
+            log.usage()
+            sys.exit()  
     else:
         if not srcEnv or not dstEnv or not dstQueue:
+            log.error("L'environnement source, l'environnement cible et la queue de destination sont obligatoires")  
             log.usage()
             sys.exit()
+
 
 def main():
     #log.printBanner()
@@ -25,7 +33,7 @@ def main():
         opts, args = getopt.getopt(sys.argv[1:], "hf:t:f:q:a:", ["help","from","to","queue","action"])
 
     except getopt.GetoptError as err:
-        log.err(err)  
+        log.error(err)  
         log.usage()
         sys.exit(2)
     
@@ -54,14 +62,17 @@ def main():
 
     checkParameters(action, srcEnv, dstEnv, dstQueue)
 
-    print("FROM ENV", srcEnv, "--> TO", dstEnv)
     SRC_ENV = cfg.ENVIRONNEMENTS[srcEnv]
     if dstEnv:
+        print("FROM ENV", srcEnv, "--> TO", dstEnv)
         DST_ENV = cfg.ENVIRONNEMENTS[dstEnv]
+    else:
+        print("FROM ENV", srcEnv)
 
-    print("FROM QUEUE", srcQueue, "--> TO", dstQueue)
-    SRC_QUEUE = srcQueue
-    DST_QUEUE = dstQueue
+    if srcQueue:
+        print("FROM QUEUE", srcQueue, "--> TO", dstQueue)
+        SRC_QUEUE = srcQueue
+        DST_QUEUE = dstQueue
 
     # Export Excel des messages de la DLQ
     if action == "exportExcel":
@@ -96,6 +107,11 @@ def main():
     # Retry des messages
     if action == "retryMessages":
         core.retryMessages(SRC_ENV, SRC_QUEUE)
+
+    # Retry des messages de toutes les files MQ
+    if action == "retryMessagesAllQueues":
+        for SRC_QUEUE in cfg.ALL_DLQ_QUEUES:
+            core.retryMessages(SRC_ENV, SRC_QUEUE)
 
 
 if __name__ == "__main__":

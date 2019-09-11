@@ -43,6 +43,19 @@ URL_POST_MESSAGE = "{}/api/jolokia/"
 BODY_POST_MESSAGE = '{"type":"EXEC", "mbean":"org.apache.activemq:type=Broker,brokerName=[BROKER],destinationType=Queue,destinationName=[QUEUE]", "operation":"sendTextMessage(java.util.Map,java.lang.String,java.lang.String,java.lang.String)", "arguments":[ARGUMENTS]}'
 
 
+# Queues
+ALL_DLQ_QUEUES = [
+    "DLQ.Consumer.SGENCLI.VirtualTopic.TDATAGPP",
+    "DLQ.Consumer.SGENGPP.VirtualTopic.TDATALEGACY",
+    "DLQ.QDATALEGACY",
+    "DLQ.QGENCLI",
+    "DLQ.QGENGPP",
+    "DLQ.SGENGED",
+    "DLQ.SRECDEC",
+    "DLQ.SRECDNO",
+    "DLQ.SRECOBL"
+]
+
 # Excel file configuration
 OUTPUT_FOLDER = "output\\"
 EXCEL_FILE_NAME = "_Messages_MQ_Bloques.xlsx"
