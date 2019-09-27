@@ -22,6 +22,11 @@ ENVIRONNEMENTS = {
         "hostname": "http://mom-tst-01:3161",
         "broker": "ACTIVEMQ-VAL"
     },
+    "QUA": {
+        "name": "QUA",
+        "hostname": "http://mom-tst-01:8161",
+        "broker": "ACTIVEMQ-QUA"
+    },
     "PRD": {
         "name": "PRD",
         "hostname": "http://mom-prd-01:8161",
