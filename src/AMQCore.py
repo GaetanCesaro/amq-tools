@@ -62,7 +62,7 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
         properties = properties + "}"
 
         # 1ere passe de formatage
-        text = json.dumps(message["Text"]).replace(' ', '').replace('\\\"', '"')
+        text = json.dumps(message["Text"]).replace(' ', '').replace('\\\"', '"').replace('\"{', '{').replace('}\"', '}').replace('\\n', '')
 
         # ajout dans le fichier excel
         if writeExcelFile: 
@@ -74,7 +74,6 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
                 ws1.append([table, operation, dlqDeliveryFailureCause, properties, text.replace('\\\"', '"').replace('"{"', '{"').replace('"}"', '"}')])
             else:
                 ws1.append([dlqDeliveryFailureCause, properties, text.replace('\\\"', '"').replace('"{"', '{"').replace('"}"', '"}')])
-            
 
         argument = []
         argument.append(properties)
@@ -83,7 +82,7 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
         argument.append(cfg.PASSWORD)
 
         # 2eme passe de formatage pour préparer le body
-        argumentText = json.dumps(argument).replace('\\\"', '"').replace('\\\"', '"').replace('\\\"', '"').replace('\\\"', '"').replace('"{"', '{"').replace('"{"', '{"').replace('"}"', '"}').replace('"}"', '"}').replace('}"",', '},')
+        argumentText = json.dumps(argument).replace('\\\"', '"').replace('\\\"', '"').replace('\\\"', '"').replace('\\\"', '"').replace('"{"', '{"').replace('"{"', '{"').replace('"}"', '"}').replace('"}"', '"}').replace('}"",', '},').replace('}",', '},')
         messageList.append(argumentText)
 
     if writeExcelFile:
