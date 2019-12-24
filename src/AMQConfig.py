@@ -52,13 +52,20 @@ BODY_POST_MESSAGE = '{"type":"EXEC", "mbean":"org.apache.activemq:type=Broker,br
 ALL_DLQ_QUEUES = [
     "DLQ.Consumer.SGENCLI.VirtualTopic.TDATAGPP",
     "DLQ.Consumer.SGENGPP.VirtualTopic.TDATALEGACY",
+    "DLQ.Consumer.SGENCLI.VirtualTopic.TDATAPOSTGRE",
+    "DLQ.Consumer.SGENDIF.VirtualTopic.TDATAPOSTGRE",
+    "DLQ.Consumer.SGENGPP.VirtualTopic.TDATAPOSTGRE",
     "DLQ.QDATALEGACY",
     "DLQ.QGENCLI",
+    "DLQ.QGENDIF",
     "DLQ.QGENGPP",
+    "DLQ.SGENBPM",
     "DLQ.SGENGED",
     "DLQ.SRECDEC",
     "DLQ.SRECDNO",
-    "DLQ.SRECOBL"
+    "DLQ.SRECOBL",
+    "DLQ.SRECREG",
+    "DLQ.SRECVIS"
 ]
 
 # Excel file configuration

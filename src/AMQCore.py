@@ -13,7 +13,7 @@ import src.AMQConfig as cfg
 import src.AMQLog as log
 
 
-def processJsonResponse(method, response):
+def processJsonResponse(method, response, exitOnError=True):
     if (response.status_code == 200):
         jsonResponse = json.loads(response.text)
         responseCode = jsonResponse["status"]
@@ -21,7 +21,8 @@ def processJsonResponse(method, response):
 
         if responseCode != 200:
             log.error(response.text)
-            sys.exit(2)
+            if exitOnError:
+                sys.exit(2)
 
         return jsonResponse
     else:
@@ -112,9 +113,10 @@ def postMessage(environnement, queue, message):
 
 def retryMessages(environnement, queue):
     response = requests.get(cfg.URL_RETRY_MESSAGES.format(environnement["hostname"], environnement["broker"], queue), params=None, verify=False, auth=(cfg.USERNAME, cfg.PASSWORD))
-    jsonResponse = processJsonResponse("retryMessages", response)
+    jsonResponse = processJsonResponse("retryMessages", response, exitOnError=False)
 
     if jsonResponse:
-        log.ok("Queue %s - Nb message rejoues: %s" %(queue, str(jsonResponse["value"])))
+        if 'value' in jsonResponse:
+            log.ok("Queue %s - Nb message rejoues: %s" %(queue, str(jsonResponse["value"])))
         return jsonResponse
 
