@@ -76,7 +76,7 @@ def main():
 
     # Export Excel des messages de la DLQ
     if action == "exportExcel":
-        log.ok("Génération du fichier Excel")
+        log.info("Génération du fichier Excel")
         writeExcelFile = True
 
         allMessages = core.getAllMessages(SRC_ENV, SRC_QUEUE)
@@ -84,7 +84,7 @@ def main():
 
     # Post d'un seul message
     if action == "postFirstMessage":            
-        log.ok("Post 1er message de queue %s vers queue %s" %(SRC_QUEUE, DST_QUEUE))
+        log.info("Post 1er message de queue %s vers queue %s" %(SRC_QUEUE, DST_QUEUE))
 
         allMessages = core.getAllMessages(SRC_ENV, SRC_QUEUE)
         bodyList = core.formatMessages(allMessages, SRC_ENV, DST_QUEUE, writeExcelFile)
@@ -96,7 +96,7 @@ def main():
 
     # Post de tous les messages
     if action == "postAllMessages":
-        log.ok("Posting all messages from queue %s to queue %s" %(SRC_QUEUE, DST_QUEUE))
+        log.info("Posting all messages from queue %s to queue %s" %(SRC_QUEUE, DST_QUEUE))
 
         allMessages = core.getAllMessages(SRC_ENV, SRC_QUEUE)
         bodyList = core.formatMessages(allMessages, SRC_ENV, DST_QUEUE, writeExcelFile)

@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 from tqdm import tqdm
 from termcolor import colored
+import src.AMQConfig as cfg
 
 
 # Logs tqdm configuration
-def ok(msg): tqdm.write(colored('OK --> ' + msg, 'green'))
-def error(msg): tqdm.write(colored('ERROR --> ' + msg, 'red'))
-def warn(msg): tqdm.write(colored('WARN --> ' + 'yellow'))
+def debug(msg): 
+    if cfg.LOGLEVEL == "DEBUG":
+        tqdm.write(colored('[DEBUG] ' + msg, 'yellow'))
 
+def info(msg): tqdm.write(colored('[INFO]' + msg, 'green'))
+def warn(msg): tqdm.write(colored('[WARN] ' + 'orange'))
+def error(msg): tqdm.write(colored('[ERROR] ' + msg, 'red'))
 
 
 def printBanner():

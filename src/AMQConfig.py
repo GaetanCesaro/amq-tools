@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+LOGLEVEL = "DEBUG"
+
 # Environnements
 ENVIRONNEMENTS = {
     "LOCALHOST": {

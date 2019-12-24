@@ -17,7 +17,7 @@ def processJsonResponse(method, response, exitOnError=True):
     if (response.status_code == 200):
         jsonResponse = json.loads(response.text)
         responseCode = jsonResponse["status"]
-        log.ok("%s - HTTP Status %s" %(method, str(jsonResponse["status"])))
+        log.info("%s - HTTP Status %s" %(method, str(jsonResponse["status"])))
 
         if responseCode != 200:
             log.error(response.text)
@@ -91,11 +91,11 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
         if not os.path.exists(pathFolder):
             os.mkdir(pathFolder)
         path = pathFolder + environnement["name"] + cfg.EXCEL_FILE_NAME
-        log.ok("fichier excel: %s" %path)
+        log.info("Fichier excel: %s" %path)
         wb.save(path)
     
     time.sleep(0.1)
-    log.ok("formatMessages - {} messages traites".format(len(messageList)))
+    log.info("FormatMessages - {} messages traites".format(len(messageList)))
     return messageList
 
 
@@ -117,6 +117,6 @@ def retryMessages(environnement, queue):
 
     if jsonResponse:
         if 'value' in jsonResponse:
-            log.ok("Queue %s - Nb message rejoues: %s" %(queue, str(jsonResponse["value"])))
+            log.info("Queue %s - Nb message rejoues: %s" %(queue, str(jsonResponse["value"])))
         return jsonResponse
 
