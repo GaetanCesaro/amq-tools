@@ -63,13 +63,18 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
         properties = properties + "}"
 
         # 1ere passe de formatage
-        text = json.dumps(message["Text"]).replace(' ', '').replace('\\\"', '"').replace('\"{', '{').replace('}\"', '}').replace('\\n', '')
+        log.debug(queue)
+
+        if "TDATALEGACY" in queue:
+            text = json.dumps(message["Text"]).replace(' ', '').replace('\\\"', '"').replace('\\n', '')
+        else:
+            text = json.dumps(message["Text"]).replace(' ', '').replace('\\\"', '"').replace('\"{', '{').replace('}\"', '}').replace('\\n', '')    
 
         # ajout dans le fichier excel
         if writeExcelFile: 
             dlqDeliveryFailureCause = message["StringProperties"]['dlqDeliveryFailureCause']
 
-            if queue == "DLQ.Consumer.SGENGPP.VirtualTopic.TDATALEGACY":
+            if "TDATALEGACY" in queue:
                 table = message["StringProperties"]['TABLE']
                 operation = message["StringProperties"]['OPERATION']
                 ws1.append([table, operation, dlqDeliveryFailureCause, properties, text.replace('\\\"', '"').replace('"{"', '{"').replace('"}"', '"}')])
@@ -83,7 +88,9 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
         argument.append(cfg.PASSWORD)
 
         # 2eme passe de formatage pour préparer le body
-        argumentText = json.dumps(argument).replace('\\\"', '"').replace('\\\"', '"').replace('\\\"', '"').replace('\\\"', '"').replace('"{"', '{"').replace('"{"', '{"').replace('"}"', '"}').replace('"}"', '"}').replace('}"",', '},').replace('}",', '},')
+        argumentText = json.dumps(argument).replace('\\\"', '"').replace('\\\"', '"').replace('\\\"', '"').replace('\\\"', '"').replace('"{"', '{"').replace('"{"', '{"').replace('"}"', '"}').replace('"}"', '"}').replace('}"",', '},')
+        log.debug(argumentText)
+        
         messageList.append(argumentText)
 
     if writeExcelFile:
@@ -105,6 +112,7 @@ def postMessage(environnement, queue, message):
         return
 
     textBody = cfg.BODY_POST_MESSAGE.replace("[BROKER]", environnement["broker"]).replace("[QUEUE]", queue).replace("[ARGUMENTS]", message)
+    log.debug(textBody)
     jsonBody = json.loads(textBody)
 
     response = requests.post(cfg.URL_POST_MESSAGE.format(environnement["hostname"]), json=jsonBody, auth=(cfg.USERNAME, cfg.PASSWORD))
