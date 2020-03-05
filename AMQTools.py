@@ -33,7 +33,7 @@ def main():
         opts, args = getopt.getopt(sys.argv[1:], "hf:t:f:q:a:", ["help","from","to","queue","action"])
 
     except getopt.GetoptError as err:
-        log.error(err)  
+        log.error(str(err))  
         log.usage()
         sys.exit(2)
     

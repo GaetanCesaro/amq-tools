@@ -9,7 +9,7 @@ def debug(msg):
     if cfg.LOGLEVEL == "DEBUG":
         tqdm.write(colored('[DEBUG] ' + msg, 'yellow'))
 
-def info(msg): tqdm.write(colored('[INFO]' + msg, 'green'))
+def info(msg): tqdm.write(colored('[INFO] ' + msg, 'green'))
 def warn(msg): tqdm.write(colored('[WARN] ' + 'orange'))
 def error(msg): tqdm.write(colored('[ERROR] ' + msg, 'red'))
 
