@@ -34,9 +34,9 @@ def usage():
     print("---")
     print("  Actions possibles : postFirstMessage, postAllMessages, retryMessages, retryMessagesAllQueues, exportExcel (voir README.md)")
     print("  Environnements possibles : LOCALHOST, DEV, INT, VAL, QUA, PRD")
-    print("  Queues possibles : Consumer.SGENGPP.VirtualTopic.TDATALEGACY, Consumer.SGENCLI.VirtualTopic.TDATAGPP")
+    print("  Queues possibles : QGENGPP.TDATALEGACY, QGENCLI.TDATASYNC,")
     print("                     QGENGPP, SRECDNO, SGENGED, SRECOBL, QDATALEGACY, ...")
 
     print("  Exemples: python AMQTools.py -f VAL -t LOCALHOST -q QGENGPP -a postFirstMessage")
-    print("            python AMQTools.py -f PRD -t DEV -q Consumer.SGENGPP.VirtualTopic.TDATALEGACY -a postAllMessages")
+    print("            python AMQTools.py -f PRD -t DEV -q QGENGPP.TDATALEGACY -a postAllMessages")
     print("---")

@@ -23,8 +23,8 @@ pip install -r requirements.txt
 python AMQTools.py -f PRD -a retryMessagesAllQueues
 python AMQTools.py -f PRD -a retryMessages -q QGENGPP
 python AMQTools.py -f PRD -a exportExcel -q QGENGPP
-python AMQTools.py -f VAL -t LOCALHOST -a postFirstMessage -q Consumer.SGENGPP.VirtualTopic.TDATALEGACY
-python AMQTools.py -f PRD -t DEV -a postAllMessages -q Consumer.SGENGPP.VirtualTopic.TDATALEGACY 
+python AMQTools.py -f VAL -t LOCALHOST -a postFirstMessage -q QGENGPP.TDATALEGACY
+python AMQTools.py -f PRD -t DEV -a postAllMessages -q QGENGPP.TDATALEGACY
 ```
 
 ### Liste des options
@@ -40,7 +40,7 @@ python AMQTools.py -f PRD -t DEV -a postAllMessages -q Consumer.SGENGPP.VirtualT
 ### Valeurs possibles
 
 - Environnements possibles : LOCALHOST, DEV, INT, VAL, QUA, PRD
-- Queues possibles : Consumer.SGENGPP.VirtualTopic.TDATALEGACY, Consumer.SGENCLI.VirtualTopic.TDATAGPP, QGENGPP, SRECDNO, SGENGED, SRECOBL, QDATALEGACY, ...
+- Queues possibles : QGENGPP.TDATALEGACY, QGENGPP.TDATASYNC, QGENGPP, SRECDNO, SGENGED, SRECOBL, QDATALEGACY, ...
 
 ### Liste des actions
 
