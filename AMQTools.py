@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys, getopt
+import sys, getopt, json, os
 import src.AMQConfig as cfg
 import src.AMQCore as core
 import src.AMQLog as log
@@ -9,7 +9,7 @@ from termcolor import colored
 
 def checkParameters(action, srcEnv, dstEnv, dstQueue):
     # Paramètres obligatoires sinon on sort
-    if action == "retryMessagesAllQueues":
+    if action == "retryMessagesAllQueues" or action == "postMessage":
         if not srcEnv:
             log.error("L'environnement source est obligatoire")  
             log.usage()
@@ -30,7 +30,7 @@ def main():
     #log.printBanner()
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hf:t:f:q:a:", ["help","from","to","queue","action"])
+        opts, args = getopt.getopt(sys.argv[1:], "hf:t:f:q:a:m:", ["help","from","to","queue","action","filename"])
 
     except getopt.GetoptError as err:
         log.error(str(err))  
@@ -43,6 +43,7 @@ def main():
     srcQueue = ""
     dstQueue = ""
     action = ""
+    filename = ""
 
     for opt, arg in opts:
         if opt in ("-h", "--help"):
@@ -56,7 +57,9 @@ def main():
             dstQueue = arg
             srcQueue = "DLQ."+dstQueue
         elif opt in ("-a", "--action"):
-            action = arg    
+            action = arg
+        elif opt in ("-m", "--message"):
+            filename = arg
         else:
             assert False, "unhandled option"
 
@@ -112,6 +115,19 @@ def main():
     if action == "retryMessagesAllQueues":
         for SRC_QUEUE in cfg.ALL_DLQ_QUEUES:
             core.retryMessages(SRC_ENV, SRC_QUEUE)
+
+    # Post d'un seul message
+    if action == "postMessage":            
+        log.info("Post du message du fichier %s vers queue %s" %(filename, DST_QUEUE))
+        messagesDirectory = "messages"
+
+        with open(os.path.join(messagesDirectory, filename)) as json_file:
+            data = json.load(json_file)
+            #message = "\"" + json.dumps(data).replace('"', '\\"') + "\""
+            message = json.dumps(data)
+            log.debug("Message %s" %(message))
+
+            core.postMessage(SRC_ENV, DST_QUEUE, message)
 
 
 if __name__ == "__main__":

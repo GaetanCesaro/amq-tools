@@ -1,0 +1,36 @@
+[
+	{
+		"PersistentDelivery": "true",
+		"TABLE": "CLI_ASSURE_RETRAITE"
+	},
+	{
+		"id": "933",
+		"dateCreation": "2020-03-01 02:39:56",
+		"table": "cli_assure_retraite",
+		"operation": "UPDATE",
+		"tupleBefore": {
+			"id": "933",
+			"fk_personne_physique": "312086",
+			"date_reference": null,
+			"cumul_points_acquis": null,
+			"titulaire_pension_retraite": "false",
+			"date_calcul_cumul_points_acquis": null,
+			"cumul_salaires": null,
+			"date_creation": "2020-02-29 02:29:53.10083",
+			"date_modification": "2020-02-29 02:29:53.10083"
+		},
+		"tupleAfter": {
+			"id": "84636",
+			"fk_personne_physique": "312086",
+			"date_reference": "2018-12-31",
+			"cumul_points_acquis": "720",
+			"titulaire_pension_retraite": "false",
+			"date_calcul_cumul_points_acquis": "2020-02-29",
+			"cumul_salaires": "6550295",
+			"date_creation": "2020-03-01 02:26:45.091609",
+			"date_modification": "2020-03-01 02:26:45.091609"
+		}
+	},
+	"admin",
+	"admin"
+]

@@ -25,6 +25,7 @@ python AMQTools.py -f PRD -a retryMessages -q QGENGPP
 python AMQTools.py -f PRD -a exportExcel -q QGENGPP
 python AMQTools.py -f VAL -t LOCALHOST -a postFirstMessage -q QGENGPP.TDATALEGACY
 python AMQTools.py -f PRD -t DEV -a postAllMessages -q QGENGPP.TDATALEGACY
+python AMQTools.py -f DEV -a postMessage -q QGENCLI.TDATASYNC -m QGENCLI.TDATASYNC-Notification-CLI_ASSURE_RETRAITE.json
 ```
 
 ### Liste des options
@@ -36,6 +37,7 @@ python AMQTools.py -f PRD -t DEV -a postAllMessages -q QGENGPP.TDATALEGACY
 | -t <environnement_cible> (--to)     | Environnement cible où vont être envoyés les messages JMS           |
 | -q <queue_cible> (--queue)          | File MQ cible. La file MQ source sera déduite en préfixant par DLQ. |
 | -a <action> (--action)              | Action exécutée. Voir la liste des actions possibles ci-dessous     |
+| -m <message> (--message)            | Nom du fichier (avec son extension) contenant le message à envoyer  |
 
 ### Valeurs possibles
 
@@ -51,3 +53,4 @@ python AMQTools.py -f PRD -t DEV -a postAllMessages -q QGENGPP.TDATALEGACY
 | exportExcel            | Un fichier Excel contenant les messages JMS de la DLQ associée est généré             |
 | postFirstMessage       | Récupère les messages de la file source et poste le 1er message dans la file cible    |
 | postAllMessages        | Récupère les messages de la file source et poste tous les messages dans la file cible |
+| postMessage            | Permet de poster un message JSON (header + body) déposé dans le dossier message       |

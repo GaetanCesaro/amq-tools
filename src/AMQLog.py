@@ -23,20 +23,27 @@ def printBanner():
 
 
 def usage():
-    print("Utilisation : ")
-    print("python AMQTools.py -f <environnement_source> -t <environnement_cible> -q <queue_cible> -a postFirstMessage")
-    print("")
-    print("Options : ")
-    print("-f <environnement_source> (--from) : Environnement source où vont être récupérés les messages JMS")
-    print("-t <environnement_cible> (--to) : Environnement cible où vont être envoyés les messages JMS")
-    print("-q <queue_cible> (--queue) : File MQ cible. La file MQ source sera déduite en préfixant par DLQ.")
-    print("-a <action> (--action) : Environnement cible où vont être envoyés les messages JMS")
-    print("---")
-    print("  Actions possibles : postFirstMessage, postAllMessages, retryMessages, retryMessagesAllQueues, exportExcel (voir README.md)")
-    print("  Environnements possibles : LOCALHOST, DEV, INT, VAL, QUA, PRD")
-    print("  Queues possibles : QGENGPP.TDATALEGACY, QGENCLI.TDATASYNC,")
-    print("                     QGENGPP, SRECDNO, SGENGED, SRECOBL, QDATALEGACY, ...")
+    print("""
+Utilisation : 
+    python AMQTools.py -f <environnement_source> -t <environnement_cible> -q <queue_cible> -a postFirstMessage
 
-    print("  Exemples: python AMQTools.py -f VAL -t LOCALHOST -q QGENGPP -a postFirstMessage")
-    print("            python AMQTools.py -f PRD -t DEV -q QGENGPP.TDATALEGACY -a postAllMessages")
-    print("---")
+Options : 
+    -f <environnement_source> (--from) : Environnement source où vont être recuperes les messages JMS
+    -t <environnement_cible> (--to) : Environnement cible où vont être envoyes les messages JMS
+    -q <queue_cible> (--queue) : File MQ cible. La file MQ source sera deduite en prefixant par DLQ.
+    -a <action> (--action) : Environnement cible ou vont être envoyes les messages JMS
+    -m <message> (--message) : Nom du fichier (avec son extension) contenant le message a envoyer 
+
+Actions possibles : postFirstMessage, postAllMessages, postMessage, retryMessages, retryMessagesAllQueues, exportExcel (voir README.md)
+Environnements possibles : LOCALHOST, DEV, INT, VAL, QUA, PRD
+Queues possibles : QGENGPP.TDATALEGACY, QGENCLI.TDATASYNC,QGENGPP, SRECDNO, SGENGED, SRECOBL, QDATALEGACY, ...
+
+Exemples: 
+    python AMQTools.py -f PRD -a retryMessagesAllQueues
+    python AMQTools.py -f PRD -a retryMessages -q QGENGPP
+    python AMQTools.py -f PRD -a exportExcel -q QGENGPP
+    python AMQTools.py -f VAL -t LOCALHOST -a postFirstMessage -q QGENGPP.TDATALEGACY
+    python AMQTools.py -f PRD -t DEV -a postAllMessages -q QGENGPP.TDATALEGACY
+    python AMQTools.py -f DEV -a postMessage -q QGENCLI.TDATASYNC -m QGENCLI.TDATASYNC-Notification-CLI_ASSURE_RETRAITE.json
+    """)
+    
