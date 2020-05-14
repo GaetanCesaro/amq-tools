@@ -58,15 +58,25 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
             if header != 'dlqDeliveryFailureCause':
                 properties = properties + "\"" + header + "\":\"" + message["StringProperties"][header] + "\", "
 
-        properties = properties + "\"JMSDeliveryMode\":\"" + message["JMSDeliveryMode"] + "\""
+        headers = message["LongProperties"]
+        for header in headers:
+            properties = properties + "\"" + header + "\":\"" + str(message["LongProperties"][header]) + "\", "
+
+        headers = message["BooleanProperties"]
+        for header in headers:
+            properties = properties + "\"" + header + "\":\"" + str(message["BooleanProperties"][header]) + "\", "
+
+        properties = properties + "\"JMSType\":\"" + message["JMSType"] + "\""
+        properties = properties + ", \"JMSDeliveryMode\":\"" + message["JMSDeliveryMode"] + "\""
         properties = properties + ", \"JMSPriority\":\"" + str(message["JMSPriority"]) + "\""
         properties = properties + "}"
 
         # 1ere passe de formatage
-        log.debug(queue)
-
         if "TDATALEGACY" in queue:
             text = json.dumps(message["Text"]).replace(' ', '').replace('\\\"', '"').replace('\\n', '')
+        elif "SRECDNO" in queue:
+            # Cas particulier DNO : le contenu du message n'est pas utilisé
+            text = ''    
         else:
             text = json.dumps(message["Text"]).replace(' ', '').replace('\\\"', '"').replace('\"{', '{').replace('}\"', '}').replace('\\n', '')    
 
@@ -89,7 +99,7 @@ def formatMessages(jsonResponse, environnement, queue, writeExcelFile):
 
         # 2eme passe de formatage pour préparer le body
         argumentText = json.dumps(argument).replace('\\\"', '"').replace('\\\"', '"').replace('\\\"', '"').replace('\\\"', '"').replace('"{"', '{"').replace('"{"', '{"').replace('"}"', '"}').replace('"}"', '"}').replace('}"",', '},')
-        log.debug(argumentText)
+        # log.debug(argumentText)
         
         messageList.append(argumentText)
 
