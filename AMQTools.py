@@ -55,7 +55,7 @@ def main():
             dstEnv = arg
         elif opt in ("-q", "--queue"):
             dstQueue = arg
-            srcQueue = "DLQ."+dstQueue
+            srcQueue = dstQueue
         elif opt in ("-a", "--action"):
             action = arg
         elif opt in ("-m", "--message"):

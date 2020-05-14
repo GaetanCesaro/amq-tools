@@ -30,7 +30,7 @@ Utilisation :
 Options : 
     -f <environnement_source> (--from) : Environnement source où vont être recuperes les messages JMS
     -t <environnement_cible> (--to) : Environnement cible où vont être envoyes les messages JMS
-    -q <queue_cible> (--queue) : File MQ cible. La file MQ source sera deduite en prefixant par DLQ.
+    -q <queue_cible> (--queue) : File MQ cible et source.
     -a <action> (--action) : Environnement cible ou vont être envoyes les messages JMS
     -m <message> (--message) : Nom du fichier (avec son extension) contenant le message a envoyer 
 
@@ -40,10 +40,10 @@ Queues possibles : QGENGPP.TDATALEGACY, QGENCLI.TDATASYNC,QGENGPP, SRECDNO, SGEN
 
 Exemples: 
     python AMQTools.py -f PRD -a retryMessagesAllQueues
-    python AMQTools.py -f PRD -a retryMessages -q QGENGPP
-    python AMQTools.py -f PRD -a exportExcel -q QGENGPP
-    python AMQTools.py -f VAL -t LOCALHOST -a postFirstMessage -q QGENGPP.TDATALEGACY
-    python AMQTools.py -f PRD -t DEV -a postAllMessages -q QGENGPP.TDATALEGACY
-    python AMQTools.py -f DEV -a postMessage -q QGENCLI.TDATASYNC -m QGENCLI.TDATASYNC-Notification-CLI_ASSURE_RETRAITE.json
+    python AMQTools.py -f PRD -a retryMessages -q DLQ.QGENGPP
+    python AMQTools.py -f PRD -a exportExcel -q DLQ.QGENGPP
+    python AMQTools.py -f VAL -t LOCALHOST -a postFirstMessage -q DLQ.QGENGPP.TDATALEGACY
+    python AMQTools.py -f PRD -t DEV -a postAllMessages -q DLQ.QGENGPP.TDATALEGACY
+    python AMQTools.py -f DEV -a postMessage -q DLQ.QGENCLI.TDATASYNC -m QGENCLI.TDATASYNC-Notification-CLI_ASSURE_RETRAITE.json
     """)
     

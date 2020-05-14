@@ -52,6 +52,7 @@ BODY_POST_MESSAGE = '{"type":"EXEC", "mbean":"org.apache.activemq:type=Broker,br
 
 # Queues
 ALL_DLQ_QUEUES = [
+    "DLQ.Consumer.SGENBPM.VirtualTopic.TGENEDI",
     "DLQ.QGENGPP.TDATALEGACY",
     "DLQ.QGENCLI.TDATASYNC",
     "DLQ.QGENDIF.TDATASYNC",
@@ -60,6 +61,7 @@ ALL_DLQ_QUEUES = [
     "DLQ.QGENCLI",
     "DLQ.QGENDIF",
     "DLQ.QGENGPP",
+    "DLQ.QGENMAS",
     "DLQ.SGENBPM",
     "DLQ.SGENGED",
     "DLQ.SRECDEC",

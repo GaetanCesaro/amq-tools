@@ -21,12 +21,13 @@ pip install -r requirements.txt
 
 ```
 python AMQTools.py -f PRD -a retryMessagesAllQueues
-python AMQTools.py -f PRD -a retryMessages -q QGENGPP
-python AMQTools.py -f PRD -a exportExcel -q QGENGPP
-python AMQTools.py -f VAL -t LOCALHOST -a postFirstMessage -q QGENGPP.TDATALEGACY
-python AMQTools.py -f PRD -t DEV -a postAllMessages -q QGENGPP.TDATALEGACY
-python AMQTools.py -f DEV -a postMessage -q QGENCLI.TDATASYNC -m QGENCLI.TDATASYNC-Notification-CLI_ASSURE_RETRAITE.json
+python AMQTools.py -f PRD -a retryMessages -q DLQ.QGENGPP
+python AMQTools.py -f PRD -a exportExcel -q DLQ.QGENGPP
+python AMQTools.py -f VAL -t LOCALHOST -a postFirstMessage -q DLQ.QGENGPP.TDATALEGACY
+python AMQTools.py -f PRD -t DEV -a postAllMessages -q DLQ.QGENGPP.TDATALEGACY
+python AMQTools.py -f DEV -a postMessage -q DLQ.QGENCLI.TDATASYNC -m QGENCLI.TDATASYNC-Notification-CLI_ASSURE_RETRAITE.json
 ```
+
 
 ### Liste des options
 
@@ -35,14 +36,14 @@ python AMQTools.py -f DEV -a postMessage -q QGENCLI.TDATASYNC -m QGENCLI.TDATASY
 | -h, --help                          | Aide                                                                |
 | -f <environnement_source> (--from)  | Environnement source où vont être récupérés les messages JMS        |
 | -t <environnement_cible> (--to)     | Environnement cible où vont être envoyés les messages JMS           |
-| -q <queue_cible> (--queue)          | File MQ cible. La file MQ source sera déduite en préfixant par DLQ. |
+| -q <queue_cible> (--queue)          | File MQ source et cible                                             |
 | -a <action> (--action)              | Action exécutée. Voir la liste des actions possibles ci-dessous     |
 | -m <message> (--message)            | Nom du fichier (avec son extension) contenant le message à envoyer  |
 
 ### Valeurs possibles
 
 - Environnements possibles : LOCALHOST, DEV, INT, VAL, QUA, PRD
-- Queues possibles : QGENGPP.TDATALEGACY, QGENGPP.TDATASYNC, QGENGPP, SRECDNO, SGENGED, SRECOBL, QDATALEGACY, ...
+- Queues possibles : DLQ.QGENGPP.TDATALEGACY, DLQ.QGENGPP.TDATASYNC, DLQ.QGENGPP, DLQ.SRECDNO, DLQ.SGENGED, DLQ.SRECOBL, DLQ.QDATALEGACY, ...
 
 ### Liste des actions
 
