@@ -1,6 +1,6 @@
 # AMQ-Tools
 
-AMQ-Tools est un utilitaire d'exploitation des files ActiveMQ.
+AMQ-Tools est un utilitaire d'exploitation des files ActiveMQ
 
 ## Configuration Workspace
 

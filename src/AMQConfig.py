@@ -23,24 +23,12 @@ ENVIRONNEMENTS = {
         "name": "VAL",
         "hostname": "http://mom-tst-01:3161",
         "broker": "ACTIVEMQ-VAL"
-    },
-    "QUA": {
-        "name": "QUA",
-        "hostname": "http://mom-tst-01:8161",
-        "broker": "ACTIVEMQ-QUA"
-    },
-    "PRD": {
-        "name": "PRD",
-        "hostname": "http://mom-prd-01:8161",
-        "broker": "ACTIVEMQ"
     }
 }
-
 
 # Login/Pswd
 USERNAME = "admin"
 PASSWORD = "admin"
-
 
 # Messages processing
 URL_GET_ALL_MESSAGES = "{}/api/jolokia/exec/org.apache.activemq:type=Broker,brokerName={},destinationType=Queue,destinationName={}/browse()"
@@ -48,7 +36,6 @@ URL_RETRY_MESSAGES = "{}/api/jolokia/exec/org.apache.activemq:type=Broker,broker
 #URL_GET_ONE_MESSAGE = "{}/api/jolokia/exec/org.apache.activemq:type=Broker,brokerName={},destinationType=Queue,destinationName={}/browseMessages(java.lang.String)/JMSMessageID={}"
 URL_POST_MESSAGE = "{}/api/jolokia/"
 BODY_POST_MESSAGE = '{"type":"EXEC", "mbean":"org.apache.activemq:type=Broker,brokerName=[BROKER],destinationType=Queue,destinationName=[QUEUE]", "operation":"sendTextMessage(java.util.Map,java.lang.String,java.lang.String,java.lang.String)", "arguments":[ARGUMENTS]}'
-
 
 # Queues
 ALL_DLQ_QUEUES = [
